@@ -29,13 +29,6 @@ class Post
     private $title;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="text", type="text")
-     */
-    private $text;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="datePost", type="datetime")
@@ -108,6 +101,7 @@ class Post
     public function __construct()
     {
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->datePost = new \DateTime();
     }
 
     /**
@@ -142,29 +136,5 @@ class Post
     public function getComments()
     {
         return $this->comments;
-    }
-
-    /**
-     * Set text
-     *
-     * @param string $text
-     *
-     * @return Post
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-
-        return $this;
-    }
-
-    /**
-     * Get text
-     *
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
     }
 }

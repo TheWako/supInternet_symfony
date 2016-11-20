@@ -41,6 +41,11 @@ class Comment
      */
     private $post;
 
+    public function __construct()
+    {
+        $this->dateComment = new \DateTime();
+    }
+
     /**
      * Get id
      *
