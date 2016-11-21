@@ -3,6 +3,7 @@
 namespace TicketBundle\Controller;
 
 use TicketBundle\Entity\Post;
+use TicketBundle\Entity\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -43,10 +44,19 @@ class PostController extends Controller
         $form = $this->createForm('TicketBundle\Form\PostType', $post);
         $form->handleRequest($request);
 
+        $comment = new Comment();
+        $form2 = $this->createForm('TicketBundle\Form\CommentType', $comment);
+        $form2->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $connection = $em->getConnection();
             $em->persist($post);
             $em->flush($post);
+            $em->persist($comment);
+            $em->flush($comment);
+            $statement = $connection->prepare("UPDATE comment SET post_id = ".$post->getId()." WHERE id =".$comment->getId().";");
+            $statement->execute();
 
             return $this->redirectToRoute('post_show', array('id' => $post->getId()));
         }
@@ -54,6 +64,7 @@ class PostController extends Controller
         return $this->render('post/new.html.twig', array(
             'post' => $post,
             'form' => $form->createView(),
+            'form2' => $form2->createView()
         ));
     }
 
@@ -61,15 +72,38 @@ class PostController extends Controller
      * Finds and displays a post entity.
      *
      * @Route("/{id}", name="post_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(Post $post)
+    public function showAction(Post $post, Request $request)
     {
         $deleteForm = $this->createDeleteForm($post);
+
+        $comment = new Comment();
+        $form = $this->createForm('TicketBundle\Form\CommentType', $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $connection = $em->getConnection();
+            $em->persist($comment);
+            $em->flush($comment);
+            $statement = $connection->prepare("UPDATE comment SET post_id = ".$post->getId()." WHERE id =".$comment->getId().";");
+            $statement->execute();
+
+            return $this->redirectToRoute('post_show', array('id' => $post->getId()));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("SELECT * FROM comment WHERE post_id =".$post->getId());
+        $statement->execute();
+        $result = $statement->fetchAll();
 
         return $this->render('post/show.html.twig', array(
             'post' => $post,
             'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView(),
+            'comments' => $result
         ));
     }
 
@@ -111,6 +145,9 @@ class PostController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("DELETE FROM `comment` WHERE post_id =".$post->getId());
+            $statement->execute();
             $em->remove($post);
             $em->flush($post);
         }

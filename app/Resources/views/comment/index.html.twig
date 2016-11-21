@@ -1,27 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Post</h1>
+    <h1>Comments list</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ post.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ post.title }}</td>
-            </tr>
-            <tr>
-                <th>Datepost</th>
-                <td>{% if post.datePost %}{{ post.datePost|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
     <table>
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Content</th>
                 <th>Datecomment</th>
                 <th>Actions</th>
@@ -30,6 +15,7 @@
         <tbody>
         {% for comment in comments %}
             <tr>
+                <td><a href="{{ path('comment_show', { 'id': comment.id }) }}">{{ comment.id }}</a></td>
                 <td>{{ comment.content }}</td>
                 <td>{% if comment.dateComment %}{{ comment.dateComment|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>
@@ -46,22 +32,10 @@
         {% endfor %}
         </tbody>
     </table>
-     {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
 
     <ul>
         <li>
-            <a href="{{ path('post_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('post_edit', { 'id': post.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
+            <a href="{{ path('comment_new') }}">Create a new comment</a>
         </li>
     </ul>
 {% endblock %}

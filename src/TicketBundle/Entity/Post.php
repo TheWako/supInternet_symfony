@@ -3,6 +3,7 @@
 namespace TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Post
@@ -136,5 +137,14 @@ class Post
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * toString
+     * @return string
+     */
+    public function __toString() 
+    {
+        return $this->getComment();
     }
 }

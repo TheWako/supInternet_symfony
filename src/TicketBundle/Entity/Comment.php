@@ -3,6 +3,7 @@
 namespace TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use TicketBundle\Entity\Post;
 
 /**
  * Comment
@@ -37,7 +38,7 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity="Post", inversedBy="comments")
-     * @ORM\JoinColumn(name="post_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      */
     private $post;
 
