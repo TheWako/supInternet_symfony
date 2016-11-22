@@ -1,67 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Post</h1>
-
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ post.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ post.title }}</td>
-            </tr>
-            <tr>
-                <th>Datepost</th>
-                <td>{% if post.datePost %}{{ post.datePost|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
-                <th>Content</th>
-                <th>Datecomment</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class='ticketBlock'>
+        <h2>{{ post.title }}</h2>
+        Posté le {% if post.datePost %}{{ post.datePost|date('d/m/Y') }}{% endif %} à {% if post.datePost %}{{ post.datePost|date('H:i') }}{% endif %}<br>
+        <p>
+            <a href="{{ path('post_edit', { 'id': post.id }) }}"><button>Modifier le ticket</button></a><br>
+        </p>
+        {{ form_start(delete_form) }}
+            <input type="submit" value="Supprimer le ticket">
+        {{ form_end(delete_form) }}
+    </div>
+    <h1>Commentaires</h1>
+    <div class='commentBlock'>
         {% for comment in comments %}
-            <tr>
-                <td>{{ comment.content }}</td>
-                <td>{% if comment.dateComment %}{{ comment.dateComment|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('comment_show', { 'id': comment.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('comment_edit', { 'id': comment.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
+            {{ comment.content }}<br>
+            Posté le {% if comment.dateComment %}{{ comment.dateComment|date('d/m/Y') }}{% endif %} à {% if comment.dateComment %}{{ comment.dateComment|date('H:i') }}{% endif %}<br>
+            <p><a href="{{ path('comment_edit', { 'id': comment.id }) }}"><button>Modifier</button></a></p>
+            <div class='separator'></div>
         {% endfor %}
-        </tbody>
-    </table>
-     {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('post_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('post_edit', { 'id': post.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    </div>
+    <div class='commentForm'>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <br><input type="submit" value="Poster" />
+        {{ form_end(form) }}
+    </div><br>
+    <a href="{{ path('post_index') }}"><button>Retour</button></a>
 {% endblock %}

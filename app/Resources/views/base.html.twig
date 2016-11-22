@@ -2,12 +2,28 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Ticket{% endblock %}</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/ticket/css/main.css') }}">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            <div class='titleHeader'><a href="/">Gestion de tickets</a></div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <div class='userBlock'>
+                Bienvenue {{ app.user.username }} |
+                <a href="{{ path('fos_user_security_logout') }}">
+                   <button>Se deconnecter</button>
+                </a>
+            </div>
+            {% else %}
+                <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+            {% endif %}
+        </header>
+        <div class='container'>
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

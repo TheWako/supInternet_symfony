@@ -4,6 +4,7 @@ namespace TicketBundle\Controller;
 
 use TicketBundle\Entity\Post;
 use TicketBundle\Entity\Comment;
+use TicketBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -23,9 +24,17 @@ class PostController extends Controller
      */
     public function indexAction()
     {
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-
-        $posts = $em->getRepository('TicketBundle:Post')->findAll();
+        
+        if($user->getRoles()[0] == "ROLE_ADMIN"){
+            $posts = $em->getRepository('TicketBundle:Post')->findAll();
+        }else{
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("SELECT * FROM comment JOIN post ON post_id = post.id JOIN user ON user_id = user.id WHERE user_id =".$user->getId());
+            $statement->execute();
+            $posts = $statement->fetchAll();
+        }
 
         return $this->render('post/index.html.twig', array(
             'posts' => $posts,
@@ -40,6 +49,7 @@ class PostController extends Controller
      */
     public function newAction(Request $request)
     {
+        $user = $this->getUser();
         $post = new Post();
         $form = $this->createForm('TicketBundle\Form\PostType', $post);
         $form->handleRequest($request);
@@ -55,7 +65,7 @@ class PostController extends Controller
             $em->flush($post);
             $em->persist($comment);
             $em->flush($comment);
-            $statement = $connection->prepare("UPDATE comment SET post_id = ".$post->getId()." WHERE id =".$comment->getId().";");
+            $statement = $connection->prepare("UPDATE comment SET post_id = ".$post->getId().", user_id = ".$user->getId()." WHERE id =".$comment->getId().";");
             $statement->execute();
 
             return $this->redirectToRoute('post_show', array('id' => $post->getId()));

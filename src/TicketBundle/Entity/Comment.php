@@ -42,6 +42,12 @@ class Comment
      */
     private $post;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
     public function __construct()
     {
         $this->dateComment = new \DateTime();
@@ -127,5 +133,29 @@ class Comment
     public function getPost()
     {
         return $this->post;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \TicketBundle\Entity\User $user
+     *
+     * @return Comment
+     */
+    public function setUser(\TicketBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \TicketBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

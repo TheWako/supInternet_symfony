@@ -1,0 +1,103 @@
+html, body{
+	margin: 0;
+}
+
+html {
+    background-color: #181818;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+header {
+    background-color: #282828;
+    padding: 2% 1%;
+    position: relative;
+    margin-bottom: 3%;
+    text-transform: uppercase;
+}
+
+button, input[type="submit"] {
+    background-color: transparent;
+	border: 2px solid white;
+	padding: 6px 18px;
+	border-radius: 8px;
+	color: white;
+}
+
+textarea {
+    margin-left: 1%;
+    width: 80%;
+    height: 20vh;
+}
+
+.homeContent .separator {
+    width: 64%;
+    margin: 6% auto;
+}
+
+input[type="text"]{
+	margin-left: 2%;
+}
+
+.titleHeader {
+    font-size: 1.7rem;
+}
+
+.ticketBlock {
+    width: 25%;
+    border: 2px solid transparent;
+    box-shadow: 10px 5px 5px #000;
+    background-color: #282828;
+    margin-bottom: 1%;
+    padding: 1%;
+}
+
+.commentBlock {
+    width: 25%;
+    border: 2px solid transparent;
+    box-shadow: 10px 5px 5px #000;
+    background-color: #282828;
+    margin-bottom: 1%;
+    padding: 1%;
+}
+
+.commentForm {
+    width: 25%;
+    border: 2px solid transparent;
+    box-shadow: 10px 5px 5px #000;
+    background-color: #282828;
+    margin-bottom: 1%;
+    padding: 1%;
+}
+
+.container {
+    margin: 0 1%;
+}
+
+.userBlock {
+    position: absolute;
+    right: 2%;
+    top: 36%;
+}
+
+.homeContent {
+    border: 2px solid transparent;
+    box-shadow: 10px 5px 5px #000;
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 25vh;
+    background-color: #282828;
+    padding-bottom: 2%;
+}
+
+.separator {
+    border: 2px solid #181818;
+    margin: 8% 0%;
+}
