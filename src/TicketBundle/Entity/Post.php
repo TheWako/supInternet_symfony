@@ -42,6 +42,12 @@ class Post
     private $comments;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="post")
+     * @ORM\JoinColumn(name="userId", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
      * Get id
      *
      * @return int
@@ -146,5 +152,29 @@ class Post
     public function __toString() 
     {
         return $this->getComment();
+    }
+
+    /**
+     * Set user
+     *
+     * @param \TicketBundle\Entity\User $user
+     *
+     * @return Post
+     */
+    public function setUser(\TicketBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \TicketBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

@@ -4,19 +4,23 @@
     <div class='ticketBlock'>
         <h2>{{ post.title }}</h2>
         Posté le {% if post.datePost %}{{ post.datePost|date('d/m/Y') }}{% endif %} à {% if post.datePost %}{{ post.datePost|date('H:i') }}{% endif %}<br>
-        <p>
-            <a href="{{ path('post_edit', { 'id': post.id }) }}"><button>Modifier le ticket</button></a><br>
-        </p>
-        {{ form_start(delete_form) }}
-            <input type="submit" value="Supprimer le ticket">
-        {{ form_end(delete_form) }}
+        {% if user.roles[0] == "ROLE_ADMIN" %}
+            <p>
+                <a href="{{ path('post_edit', { 'id': post.id }) }}"><button>Modifier le ticket</button></a><br>
+            </p>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Supprimer le ticket">
+            {{ form_end(delete_form) }}
+        {% endif %}
     </div>
     <h1>Commentaires</h1>
     <div class='commentBlock'>
         {% for comment in comments %}
             {{ comment.content }}<br>
             Posté le {% if comment.dateComment %}{{ comment.dateComment|date('d/m/Y') }}{% endif %} à {% if comment.dateComment %}{{ comment.dateComment|date('H:i') }}{% endif %}<br>
-            <p><a href="{{ path('comment_edit', { 'id': comment.id }) }}"><button>Modifier</button></a></p>
+            {% if user.roles[0] == "ROLE_ADMIN" %}
+                <p><a href="{{ path('comment_edit', { 'id': comment.id }) }}"><button>Modifier</button></a></p>
+            {% endif %}
             <div class='separator'></div>
         {% endfor %}
     </div>

@@ -2,11 +2,12 @@
 
 {% block body %}
     <h1>Ajouter un nouveau ticket</h1>
-
+<div class='ticketBlock'>
     {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_widget(form2) }}
         <input type="submit" value="Ajouter" />
     {{ form_end(form) }}
     <a href="{{ path('post_index') }}"><button>Retour</button></a>
+</div>
 {% endblock %}

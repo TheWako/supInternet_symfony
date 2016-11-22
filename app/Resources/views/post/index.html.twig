@@ -2,6 +2,7 @@
 
 {% block body %}
     <h1>Liste des tickets</h1>
+    {% if user.roles[0] == "ROLE_ADMIN" %}
         {% for post in posts %}
         <div class='ticketBlock'>
             <a href="{{ path('post_show', { 'id': post.id }) }}"><h2>{{ post.title }}</h2><br></a>
@@ -10,4 +11,13 @@
         </div>
         {% endfor %}
         <a href="{{ path('post_new') }}"><button>Ajouter un nouveau ticket</button></a>
+    {% else %}
+        {% for post in posts %}
+        <div class='ticketBlock'>
+            <a href="{{ path('post_show', { 'id': post.post_id }) }}"><h2>{{ post.title }}</h2><br></a>
+            Posté le {% if post.datePost %}{{ post.datePost|date('d/m/Y') }}{% endif %} à {% if post.datePost %}{{ post.datePost|date('H:i') }}{% endif %}<br>
+        </div>
+        {% endfor %}
+        <a href="{{ path('post_new') }}"><button>Ajouter un nouveau ticket</button></a>
+    {% endif %}
 {% endblock %}

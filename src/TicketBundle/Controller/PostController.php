@@ -38,6 +38,7 @@ class PostController extends Controller
 
         return $this->render('post/index.html.twig', array(
             'posts' => $posts,
+            'user' => $user,
         ));
     }
 
@@ -65,6 +66,8 @@ class PostController extends Controller
             $em->flush($post);
             $em->persist($comment);
             $em->flush($comment);
+            $statement = $connection->prepare("UPDATE post SET userId = ".$user->getId()." WHERE id =".$post->getId().";");
+            $statement->execute();
             $statement = $connection->prepare("UPDATE comment SET post_id = ".$post->getId().", user_id = ".$user->getId()." WHERE id =".$comment->getId().";");
             $statement->execute();
 
@@ -87,6 +90,7 @@ class PostController extends Controller
     public function showAction(Post $post, Request $request)
     {
         $deleteForm = $this->createDeleteForm($post);
+        $user = $this->getUser();
 
         $comment = new Comment();
         $form = $this->createForm('TicketBundle\Form\CommentType', $comment);
@@ -111,6 +115,7 @@ class PostController extends Controller
 
         return $this->render('post/show.html.twig', array(
             'post' => $post,
+            'user' => $user,
             'delete_form' => $deleteForm->createView(),
             'form' => $form->createView(),
             'comments' => $result
